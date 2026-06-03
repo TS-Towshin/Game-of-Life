@@ -1,4 +1,0 @@
-Left click -> Toggle cell
-Enter/Return -> Toggle auto simulation
-Space -> Simulate next generation
-Esc -> Clear the grid
