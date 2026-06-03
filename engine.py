@@ -6,7 +6,7 @@ import time
 width, height = 900, 900
 row, col = int(height**0.5), int(width**0.5)
 
-def grid(state:list[list[bool]], row:int, col:int, width:int, height:int) -> list[list[pygame.Rect, bool]]:
+def grid(state:list[list[bool]], row:int,col:int, width:int, height:int) -> list[list[pygame.Rect, bool]]:
     '''
     Generate the grid
     '''
@@ -41,7 +41,7 @@ def drawGrid(screen, grid_list:list[list[pygame.Rect, bool]]) -> None:
         pygame.draw.rect(screen, "gray", cell[0], 1)
 
 
-def calculate(screen, state:list[list[bool]]) -> list[list[bool]]:
+def calculate(screen, state:list[list[bool]], hl: bool = False) -> list[list[bool]]:
     '''
     Calculate the next state of the game
     '''
@@ -60,7 +60,7 @@ def calculate(screen, state:list[list[bool]]) -> list[list[bool]]:
                         continue
                     if state[r+i][c+j]:
                         n += 1
-                    if state[r][c]:
+                    if state[r][c] and hl:
                         highlight(screen, r+i, c+j)
 
             if n < 2 or n > 3:
@@ -78,6 +78,7 @@ def main() -> int:
     state = [[0 for _ in range(col)] for _ in range(row)]
     grid_list = grid(state, row, col, width, height)
     simulate = False
+    hl = False
     clock = pygame.time.Clock()
     while True:
         clock.tick(5)
@@ -100,12 +101,14 @@ def main() -> int:
                 if event.key == pygame.K_RETURN:
                     simulate = not simulate
                 if event.key == pygame.K_SPACE:
-                    state = calculate(screen, state)
+                    state = calculate(screen, state, hl)
                     grid_list = grid(state, row, col, width, height)
+                if event.key == pygame.K_h:
+                    hl = not hl
 
         drawGrid(screen, grid_list)
         if simulate:
-            state = calculate(screen, state)
+            state = calculate(screen, state, hl)
             grid_list = grid(state, row, col, width, height)
 
             simulate = False
